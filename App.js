@@ -1,43 +1,23 @@
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 // import 'bootstrap/dist/css/bootstrap.min.css'; NOT SUPPORTED BY react-native !!!
-import Navbar from './components/navbar';
+// import Navbar from './components/navbar';
+import Homepage from './components/Homepage';
+import Details from './components/Details';
 
-const myApp = () => {
-    const [isLoading, setLoading] = useState(true);
-    const [data, setData] = useState([]);
-
-    const getMovies = async () => {
-        try {
-            const response = await fetch('https://reactnative.dev/movies.json');
-            const json = await response.json();
-            console.log(json);
-            setData(json.movies);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    useEffect(() => {
-        getMovies();
-    }, []);
+function App({ navigation }) {
+    const Stack = createNativeStackNavigator();
 
     return (
-        <View>
-            <Navbar />
-            {isLoading ? <ActivityIndicator /> : (
-                <FlatList
-                    data={data}
-                    keyExtractor={({ id }, index) => id}
-                    renderItem={({ item }) => (
-                        <Text>{item.title}, {item.releaseYear}</Text>
-                    )}
-                />
-            )}
-        </View>
+        <NavigationContainer>
+            <Stack.Navigator>
+                <Stack.Screen name="Home" component={Homepage} />
+                <Stack.Screen name="Details" component={Details} />
+            </Stack.Navigator>
+        </NavigationContainer>
     );
 };
 
-export default myApp;
+export default App;
